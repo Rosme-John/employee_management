@@ -13,19 +13,10 @@
 include 'config/database.php';?>
 <style>
 .table-primary{background-color: #b8daff;}
-.file {
-  position: relative;
-  overflow: hidden;
-}
+.file {position: relative;overflow: hidden;cursor: pointer;}
 .table{margin-top:15px;}
-.file_upload {
-  position: absolute;
-  font-size: 50px;
-  opacity: 0;
-  right: 0;
-  top: 0;
-}
 h4{color:#777;}
+#file{cursor: pointer;}
 </style>
 
 <?php
@@ -36,7 +27,7 @@ if(isset($_FILES['file']['name'])){
   if($ext=='csv'){
   //Row and Column Validation
   $row = 1;
-  $error_status =0 ;
+  $error_status =$flag =0 ;
   $handle = fopen($_FILES['file']['tmp_name'], "r");
     while ($data = fgetcsv($handle)) {
       $column = count($data);//column count
@@ -92,7 +83,7 @@ if(isset($_FILES['file']['name'])){
   {
     $_SESSION["error_status"] = "1";
   }
-  elseif($flag==0){
+  else if($flag==0){
     $_SESSION["error_status"] ="2";
     $fhandle = fopen($_FILES['file']['tmp_name'], "r");
       while ($listing = fgetcsv($fhandle)) {
@@ -112,12 +103,25 @@ if(isset($_FILES['file']['name'])){
   } 
 } 
 ?>
+
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.php">Employee Management</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="index.php">Home</a></li>
+    </ul>
+  </div>
+</nav>
+  
 <div class="container">
-  <h1>Employee Management</h1>
-  <h4>You can add employee details by uploading csv files.</h4>
+  <h3>Employee Details</h3>
+  <p>You can add employee details by uploading csv files.</p>
+
   <?php if(isset($_SESSION["error_status"]) && ($_SESSION["error_status"]==1)){ ?>
   <div class="alert alert-danger alert-dismissible">
-    <strong>Error!</strong> Invalid Data format.please check before uploading.
+    <strong>Error!</strong> Invalid Data format.please check the file before uploading.
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
   <?php } if(isset($_SESSION["error_status"]) && ($_SESSION["error_status"]==2)){ ?>
@@ -149,6 +153,10 @@ if(isset($_FILES['file']['name'])){
   </div>  
   </div>  
 </form>
+<section>
+<p>Data Format*</p>
+<p>Employee Code:Alphanumeric values,Employee Name:Alphabetic values,Department:Alphabetic values,Age:Numeric values,Experience:Numeric values.</p>
+</section>
 <table class="table table-bordered table-striped">
     <thead>
       <tr  class="table-primary">
